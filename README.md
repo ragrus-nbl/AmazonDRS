@@ -56,6 +56,8 @@ TODO
 
 This method starts the authentication process using the internal mechanisms. The authentication process is described [here](TODO). Either this method or [*setRefreshToken*](TODO) should be called and authentication should be done before making any DRS-related requests.
 
+The internal authentication mechanisms become disabled once authentication succeeds. They can be restarted if needed.
+
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
 | *testDevice* | Boolean | Optional | `True` if it is a test device making test orders. For more information, please see [here](https://developer.amazon.com/docs/dash/test-device-purchases.html). |
