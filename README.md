@@ -63,7 +63,9 @@ This method starts the authentication process using the internal mechanisms. The
 | *testDevice* | Boolean | Optional | `True` if it is a test device making test orders. For more information, please see [here](https://developer.amazon.com/docs/dash/test-device-purchases.html). |
 | *onAuthenticated* | Function | Optional | Callback called when any result of authentication is got. |
 
-The method returns nothing. A result of the operation may be obtained via the onAuthenticated callback, if specified in this method.
+The method returns nothing. A result of the operation may be obtained via the [onAuthenticated](TODO) callback, if specified in this method.
+
+#### Callback: onAuthenticated(*error, details*) ####
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
@@ -71,6 +73,8 @@ The method returns nothing. A result of the operation may be obtained via the on
 | *details* | Table | Key-value table with the error's details provided by Amazon server. May be empty. This parameter should be ignored if *error* is `0`. [More about authentication errors descriptions](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#authorization-errors). |
 
 TODO: could be some exceptions
+
+#### Example ####
 
 ```
 TODO
@@ -85,6 +89,8 @@ This method allows to set a `Refresh Token` manually. It is used with an externa
 | *refreshToken* | String | Yes | An authentication `Refresh Token` used to acquire an `Access Token` and refresh it when expired. |
 
 The method returns nothing.
+
+#### Example ####
 
 ```
 TODO
@@ -101,10 +107,14 @@ This method places an order for a device/slot combination. For more information,
 
 The method returns nothing. A result of the operation may be obtained via the onReplenished callback, if specified in this method.
 
+#### Callback: onReplenished(*error, response*) ####
+
 | Parameter | Data Type | Description |
 | --- | --- | --- |
 | *error* | Integer | `0` if the operation is completed successfully, an error code otherwise. |
 | *response* | Table | Key-value table with the response provided by Amazon server. May be empty. |
+
+#### Example ####
 
 ```
 TODO
@@ -121,10 +131,14 @@ This method cancels test orders for one or all slots in the device. For more inf
 
 The method returns nothing. A result of the operation may be obtained via the onCanceled callback, if specified in this method.
 
+#### Callback: onCanceled(*error, response*) ####
+
 | Parameter | Data Type | Description |
 | --- | --- | --- |
 | *error* | Integer | `0` if the operation is completed successfully, an error code otherwise. |
 | *response* | Table | Key-value table with the response provided by Amazon server. May be empty. |
+
+#### Example ####
 
 ```
 TODO
