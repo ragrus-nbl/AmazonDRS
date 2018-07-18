@@ -158,4 +158,4 @@ Tests for the library are provided in the [tests](./tests) directory and describ
 
 ## License ##
 
-The ThingWorx library is licensed under the [MIT License](./LICENSE)
+The AmazonDRS library is licensed under the [MIT License](./LICENSE)
