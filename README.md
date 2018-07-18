@@ -146,6 +146,21 @@ TODO
 
 This method enables (*value* is `true`) or disables (*value* is `false`) the library debug output (including error logging). It is disabled by default. The method returns nothing.
 
+### Error codes ###
+
+An *Integer* error code which specifies a concrete error (if any) happened during an operation.
+
+| Error Code | Description |
+| --- | --- |
+| 0 | No error. |
+| 1-99 | [Internal errors of the HTTP API](https://developer.electricimp.com/api/httprequest/sendasync). |
+| 100-999 | HTTP error codes from Amazon server. |
+| 1000 | The client is not authenticated. |
+| 1001 | The authentication process is already started. |
+| 1002 | The operation is not allowed now. Eg. the same operation is already in process. |
+| 1003 | The operation is timed out. |
+| 1010 | General error. |
+
 ## Examples ##
 
 Working examples are provided in the [examples](./examples) directory and described [here](./examples/README.md).
