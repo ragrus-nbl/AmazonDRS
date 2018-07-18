@@ -14,7 +14,8 @@ TODO: should we write a description of the auth process used? Or is it enough to
 **To add this library to your project, add the following lines to the top of your agent code:**
 
 ```squirrel
-#require "rocky.class.nut:2.0.1" (TODO: Should we place this line into the library's code?)
+// Rocky is only required if you are going to use the internal authentication mechanisms
+#require "Rocky.class.nut:2.0.1"
 #require "AmazonDRS.agent.lib.nut:1.0.0"
 ```
 
