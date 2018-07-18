@@ -42,8 +42,8 @@ This method returns a new AmazonDRS instance.
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
-| *deviceModel* | String | Yes | Device Model. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
-| *deviceSerial* | String | Yes | Device Serial. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
+| *deviceModel* | String | Yes | `Device Model`. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
+| *deviceSerial* | String | Yes | `Device Serial`. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
 | *clientId* | String | Yes | `Client ID` of your LWA Security Profile. |
 | *clientSecret* | String | Yes | `Client Secret` of your LWA Security Profile. |
 
@@ -56,7 +56,7 @@ TODO
 
 ### startAuthentication(*[testDevice[, onAuthenticated]]*) ###
 
-This method starts the authentication process using the internal mechanisms. Either this method or [*setRefreshToken*](TODO) should be called before making any DRS-related requests.
+This method starts the authentication process using the internal mechanisms. The authentication process is described [here](TODO). Either this method or [*setRefreshToken*](TODO) should be called before making any DRS-related requests.
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
@@ -73,7 +73,6 @@ The method returns nothing. A result of the operation may be obtained via the on
 TODO: could be some exceptions
 
 ```
-#require "AmazonDRS.agent.lib.nut:1.0.0"
 TODO
 ```
 
@@ -88,7 +87,6 @@ This method allows to set a `Refresh Token` manually. It is used with an externa
 The method returns nothing.
 
 ```
-#require "AmazonDRS.agent.lib.nut:1.0.0"
 TODO
 ```
 
@@ -99,7 +97,7 @@ This method places an order for a device/slot combination. For more information,
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
 | *slotId* | String | Yes | ID of a slot to place an order for it. |
-| *onReplenished* | Function | Optional |  |
+| *onReplenished* | Function | Optional | Callback called when the operation is completed or an error happens. |
 
 The method returns nothing. A result of the operation may be obtained via the onReplenished callback, if specified in this method.
 
@@ -109,7 +107,6 @@ The method returns nothing. A result of the operation may be obtained via the on
 | *response* | Table | Key-value table with the response provided by Amazon server. May be empty. |
 
 ```
-#require "AmazonDRS.agent.lib.nut:1.0.0"
 TODO
 ```
 
@@ -120,7 +117,7 @@ This method cancels test orders for one or all slots in the device. For more inf
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
 | *slotId* | String | Yes | ID of a slot to cancel a test order for it. |
-| *onReplenished* | Function | Optional |  |
+| *onReplenished* | Function | Optional | Callback called when the operation is completed or an error happens. |
 
 The method returns nothing. A result of the operation may be obtained via the onCanceled callback, if specified in this method.
 
@@ -130,7 +127,6 @@ The method returns nothing. A result of the operation may be obtained via the on
 | *response* | Table | Key-value table with the response provided by Amazon server. May be empty. |
 
 ```
-#require "AmazonDRS.agent.lib.nut:1.0.0"
 TODO
 ```
 
