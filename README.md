@@ -56,7 +56,7 @@ TODO
 
 ### startAuthentication(*[testDevice[, onAuthenticated]]*) ###
 
-This method starts the authentication process using the internal mechanisms. The authentication process is described [here](TODO). Either this method or [*setRefreshToken*](TODO) should be called before making any DRS-related requests.
+This method starts the authentication process using the internal mechanisms. The authentication process is described [here](TODO). Either this method or [*setRefreshToken*](TODO) should be called and authentication should be done before making any DRS-related requests.
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
