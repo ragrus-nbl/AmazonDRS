@@ -61,7 +61,7 @@ The internal authentication mechanisms become disabled once authentication succe
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
-| *testDevice* | Boolean | Optional | `True` if it is a test device making test orders. For more information, please see [here](https://developer.amazon.com/docs/dash/test-device-purchases.html). |
+| *testDevice* | Boolean | Optional | `True` if it is a test device making test orders. `False` by default. For more information, please see [here](https://developer.amazon.com/docs/dash/test-device-purchases.html). |
 | *onAuthenticated* | Function | Optional | Callback called when any result of authentication is got. |
 
 The method returns nothing. A result of the operation may be obtained via the [onAuthenticated](TODO) callback, if specified in this method.
