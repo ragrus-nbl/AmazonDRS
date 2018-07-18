@@ -120,13 +120,13 @@ The method returns nothing. A result of the operation may be obtained via the on
 TODO
 ```
 
-### cancelTestOrder(*slotId[, onCanceled]*) ###
+### cancelTestOrder(*[slotId[, onCanceled]]*) ###
 
 This method cancels test orders for one or all slots in the device. For more information, please see [the Amazon DRS documentation](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html).
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
-| *slotId* | String | Yes | ID of a slot to cancel a test order for it. |
+| *slotId* | String | Yes | ID of a slot to be canceled. If is `null` or not specified test orders for all slots in the device will be canceled. |
 | *onReplenished* | Function | Optional | Callback called when the operation is completed or an error happens. |
 
 The method returns nothing. A result of the operation may be obtained via the onCanceled callback, if specified in this method.
