@@ -32,8 +32,6 @@ Before using the library you need to have:
 
 All requests that are made to the Amazon platform occur asynchronously. Every method that sends a request has an optional parameter which takes a callback function that will be executed when the operation is completed, whether successfully or not. The callback’s parameters are listed in the corresponding method description, but every callback has at least one parameter, *error*. If *error* is `0`, the operation has been executed successfully. Otherwise, *error* is a code of an error.
 
-Some methods require callbacks to be specified, others need only be passed a callback if you wish.
-
 ## AmazonDRS Class ##
 
 ### Constructor: AmazonDRS(*deviceModel, deviceSerial, clientId, clientSecret*) ###
