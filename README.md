@@ -5,13 +5,18 @@ This library allows your agent code to work with the [Amazon Dash Replenishment 
 This version of the library supports the following functionality:
 
 - Device authentication on the Dash Replenishment Service
-- Place test orders for Amazon goods
-- Cancel test orders
-- Place real orders for Amazon goods
+- Placing test orders for Amazon goods
+- Canceling test orders
+- Placing real orders for Amazon goods
 
-TODO: write a description of the auth process used
+TODO: should we write a description of the auth process used? Or is it enough to make a link to the example's readme?
 
-**To add this library to your project, add** `#require "AmazonDRS.agent.lib.nut:1.0.0"` **to the top of your agent code**
+**To add this library to your project, add the following lines to the top of your agent code:**
+
+```squirrel
+#require "rocky.class.nut:2.0.1" (TODO: Should we place this line into the library's code?)
+#require "AmazonDRS.agent.lib.nut:1.0.0"
+```
 
 ## Library Usage ##
 
@@ -31,46 +36,61 @@ Some methods require callbacks to be specified, others need only be passed a cal
 
 ## AmazonDRS Class ##
 
-### Constructor: AmazonDRS(*clientId, clientSecret[, onAuthenticated[, refreshToken]]*) ###
+### Constructor: AmazonDRS(*deviceModel, deviceSerial, clientId, clientSecret*) ###
 
 This method returns a new AmazonDRS instance.
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
+| *deviceModel* | String | Yes | Device Model. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
+| *deviceSerial* | String | Yes | Device Serial. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
 | *clientId* | String | Yes | `Client ID` of your LWA Security Profile. |
 | *clientSecret* | String | Yes | `Client Secret` of your LWA Security Profile. |
-| *onAuthenticated* | Function | Optional | Callback called when the client is authenticated. Never called if the *refreshToken* parameter is passed. |
-| *refreshToken* | String | Optional | An authentication `Refresh Token` used to acquire an `Access Token` and refresh it when expired. Pass it only if you want to use an external authentication process handler. It disables the internal authentication mechanisms. |
 
 #### Example ####
 
 ```
 #require "AmazonDRS.agent.lib.nut:1.0.0"
-
-const MY_PLATFORM_ENDPOINT = "<YOUR_PLATFORM_ENDPOINT>";
-const MY_APP_KEY = "<YOUR_THINGWORX_APP_KEY>";
-
-tw <- ThingWorx(MY_PLATFORM_ENDPOINT, MY_APP_KEY);
+TODO
 ```
 
 ### startAuthentication(*[testDevice[, onAuthenticated]]*) ###
 
-TODO: can produce human-readable error messages! Maybe it is worth to make an additional field for error descriptions
-
-This method ...
+This method starts the authentication process using the internal mechanisms. Either this method or [*setRefreshToken*](TODO) should be called before making any DRS-related requests.
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
-| *testDevice* | Boolean | Optional | `True` if it is a test device making test orders. For more information, please see [docs](https://developer.amazon.com/docs/dash/test-device-purchases.html). |
+| *testDevice* | Boolean | Optional | `True` if it is a test device making test orders. For more information, please see [here](https://developer.amazon.com/docs/dash/test-device-purchases.html). |
 | *onAuthenticated* | Function | Optional | Callback called when any result of authentication is got. |
 
-This method returns nothing. The result of the operation may be obtained via the *callback* function, which has the following parameter:
+The method returns nothing. A result of the operation may be obtained via the onAuthenticated callback, if specified in this method.
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
 | *error* | Integer | `0` if the authentication is successful, an error code otherwise. |
+| *details* | Table | Key-value table with the error's details provided by Amazon server. May be empty. This parameter should be ignored if *error* is `0`. [More about authentication errors descriptions](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#authorization-errors). |
 
 TODO: could be some exceptions
+
+```
+#require "AmazonDRS.agent.lib.nut:1.0.0"
+TODO
+```
+
+### setRefreshToken(*refreshToken*) ###
+
+This method allows to set a `Refresh Token` manually. It is used with an external authentication process handler. Either this method or [*startAuthentication*](TODO) should be called before making any DRS-related requests.
+
+| Parameter | Data Type | Required? | Description |
+| --- | --- | --- | --- |
+| *refreshToken* | String | Yes | An authentication `Refresh Token` used to acquire an `Access Token` and refresh it when expired. |
+
+The method returns nothing.
+
+```
+#require "AmazonDRS.agent.lib.nut:1.0.0"
+TODO
+```
 
 ### replenish(*slotId[, onReplenished]*) ###
 
@@ -78,99 +98,49 @@ This method places an order for a device/slot combination. For more information,
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
-| *slotId* | String | Yes |  |
+| *slotId* | String | Yes | ID of a slot to place an order for it. |
 | *onReplenished* | Function | Optional |  |
 
-This method returns nothing. The result of the operation may be obtained via the *callback* function, which has the following parameter:
+The method returns nothing. A result of the operation may be obtained via the onReplenished callback, if specified in this method.
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
-| *error* | [ThingWorx.Error](#thingworxerror-class) | Error details, or `null` if the operation succeeds |
+| *error* | Integer | `0` if the operation is completed successfully, an error code otherwise. |
+| *response* | Table | Key-value table with the response provided by Amazon server. May be empty. |
 
-### existThing(*thingName, callback*) ###
+```
+#require "AmazonDRS.agent.lib.nut:1.0.0"
+TODO
+```
 
-This method checks if Thing with the specified name exists.
+### cancelTestOrder(*slotId[, onCanceled]*) ###
+
+This method cancels test orders for one or all slots in the device. For more information, please see [the Amazon DRS documentation](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html).
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
-| *thingName* | String | Yes | Name of the Thing |
-| *callback* | Function | Yes | Executed once the operation is completed |
+| *slotId* | String | Yes | ID of a slot to cancel a test order for it. |
+| *onReplenished* | Function | Optional |  |
 
-This method returns nothing. The result of the operation may be obtained via the *callback* function, which has the following parameters:
-
-| Parameter | Data Type | Description |
-| --- | --- | --- |
-| *error* | [ThingWorx.Error](#thingworxerror-class) | Error details, or `null` if the operation succeeds |
-| *exist* | Boolean | `true` if the Thing exists, or `false` if the Thing does not exist or the operation fails |
-
-### deleteThing(*thingName[, callback]*) ###
-
-This method deletes Thing with the specified name.
-
-| Parameter | Data Type | Required? | Description |
-| --- | --- | --- | --- |
-| *thingName* | String | Yes | Name of the Thing |
-| *callback* | Function | Optional | Executed once the operation is completed |
-
-This method returns nothing. The result of the operation may be obtained via the *callback* function, which has the following parameter:
+The method returns nothing. A result of the operation may be obtained via the onCanceled callback, if specified in this method.
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
-| *error* | [ThingWorx.Error](#thingworxerror-class) | Error details, or `null` if the operation succeeds |
+| *error* | Integer | `0` if the operation is completed successfully, an error code otherwise. |
+| *response* | Table | Key-value table with the response provided by Amazon server. May be empty. |
 
-### createThingProperty(*thingName, propertyName, propertyType[, callback]*) ###
-
-This method creates a new Property of the specified Thing and restarts the Thing. For more information, please see [the ThingWorx documentation](https://developer.thingworx.com/resources/guides/thingworx-rest-api-quickstart/use-rest-api-add-property-thing).
-
-| Parameter | Data Type | Required? | Description |
-| --- | --- | --- | --- |
-| *thingName* | String | Yes | Name of the Thing |
-| *propertyName* | String | Yes | Name of the new Property. Must be unique across the specified Thing |
-| *propertyType* | String | Yes | Type of the new Property. Must be one of the types described in [the ThingWorx documentation](https://support.ptc.com/cs/help/thingworx_hc/thingworx_7.0_hc/index.jspx?id=ThingProperties&action=show) |
-| *callback* | Function | Optional | Executed once the operation is completed |
-
-This method returns nothing. The result of the operation may be obtained via the *callback* function, which has the following parameter:
-
-| Parameter | Data Type | Description |
-| --- | --- | --- |
-| *error* | [ThingWorx.Error](#thingworxerror-class) | Error details, or `null` if the operation succeeds |
-
-### setPropertyValue(*thingName, propertyName, propertyValue[, callback]*) ###
-
-This method sets a new value of the specified Property. For more information, please see [the ThingWorx documentation](https://developer.thingworx.com/resources/guides/thingworx-rest-api-quickstart/use-rest-api-set-property-value).
-
-| Parameter | Data Type | Required? | Description |
-| --- | --- | --- | --- |
-| *thingName* | String | Yes | Name of the Thing |
-| *propertyName* | String | Yes | Name of the Property |
-| *propertyValue* | Boolean, Integer, Float,<br>String, Key-Value Table,<br>Blob, Null | Yes | New value of the Property |
-| *callback* | Function | Optional | Executed once the operation is completed |
-
-This method returns nothing. The result of the operation may be obtained via the *callback* function, which has the following parameter:
-
-| Parameter | Data Type | Description |
-| --- | --- | --- |
-| *error* | [ThingWorx.Error](#thingworxerror-class) | Error details, or `null` if the operation succeeds |
+```
+#require "AmazonDRS.agent.lib.nut:1.0.0"
+TODO
+```
 
 ### setDebug(*value*) ###
 
 This method enables (*value* is `true`) or disables (*value* is `false`) the library debug output (including error logging). It is disabled by default. The method returns nothing.
 
-## ThingWorx.Error Class ##
-
-This class represents an error returned by the library and has the following public properties:
-
-- *type* &mdash; The error type, which is one of the following *THING_WORX_ERROR* enum values:
-    - *LIBRARY_ERROR* &mdash; The library is wrongly initialized, a method is called with invalid argument(s), or an internal error has occurred. The error details can be found in the *details* property. Usually this indicates an issue during application development which should be fixed during debugging and therefore should not occur after the application has been deployed.
-    - *REQUEST_FAILED* &mdash; An HTTP request to the ThingWorx platform failed. The error details can be found in the *details*, *httpStatus* and *httpResponse* properties. This error may occur during the normal execution of an application. The application logic should process this error.
-   - *UNEXPECTED_RESPONSE* &mdash; An unexpected response from the ThingWorx platform. The error details can be found in the *details* and *httpResponse* properties.
-- *details* &mdash; A string containing a human readable description of the error.
-- *httpStatus* &mdash; An integer indicating the HTTP status code, or `null` if the *type* property is *LIBRARY_ERROR*
-- *httpResponse* &mdash; A table of key-value strings holding the response body of the failed request, or `null` if the *type* property is *LIBRARY_ERROR*.
-
 ## Examples ##
 
-Working examples are provided in the [Examples](./Examples) directory and described [here](./Examples/README.md).
+Working examples are provided in the [examples](./examples) directory and described [here](./examples/README.md).
 
 ## Testing ##
 
