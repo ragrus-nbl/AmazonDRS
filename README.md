@@ -132,7 +132,7 @@ The method returns nothing. A result of the operation may be obtained via the [o
 | Parameter | Data Type | Description |
 | --- | --- | --- |
 | *error* | Integer | `0` if the operation is completed successfully, an error code otherwise. |
-| *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See response example](https://developer.amazon.com/docs/dash/replenish-endpoint.html#response-example). |
+| *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See response example](https://developer.amazon.com/docs/dash/replenish-endpoint.html#response-example). Also may contain an [error details](https://developer.amazon.com/docs/dash/replenish-endpoint.html#error-responses). |
 
 #### Example ####
 
@@ -158,7 +158,7 @@ The method returns nothing. A result of the operation may be obtained via the [o
 | Parameter | Data Type | Description |
 | --- | --- | --- |
 | *error* | Integer | `0` if the operation is completed successfully, an error code otherwise. |
-| *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See response example](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#response-example). |
+| *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See response example](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#response-example). Also may contain an [error details](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#error-responses). |
 
 #### Example ####
 
