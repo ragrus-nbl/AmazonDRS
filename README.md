@@ -144,6 +144,8 @@ TODO
 
 This method cancels test orders for one or all slots in the device. For more information, please see [the Amazon DRS documentation](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html).
 
+The method can only be used for the orders made by a test device ([a device authenticated as a test one](https://developer.amazon.com/docs/dash/test-device-purchases.html)). The library does not check if your device authenticated as a test one or not, so you are responsible for this check.
+
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
 | *slotId* | String | Yes | ID of a slot to be canceled. If is `null` or not specified test orders for all slots in the device will be canceled. |
