@@ -111,7 +111,7 @@ TODO
 
 ### getRefreshToken() ###
 
-The method returns the `Refresh Token` or `null` if it is not set.
+The method returns a string with the `Refresh Token` or `null` if it is not set.
 
 ### replenish(*slotId[, onReplenished]*) ###
 
