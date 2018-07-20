@@ -4,18 +4,12 @@ This library allows your agent code to work with the [Amazon Dash Replenishment 
 
 This version of the library supports the following functionality:
 
-- Two methods of device authentication on the Dash Replenishment Service: [internal and external authentication](#authentication)
+- Device authentication on the Dash Replenishment Service
 - Placing test orders for Amazon goods
 - Canceling test orders
 - Placing real orders for Amazon goods
 
-**To add this library to your project, add the following lines to the top of your agent code:**
-
-```squirrel
-// Rocky is only required if you are going to use the internal authentication
-#require "Rocky.class.nut:2.0.1"
-#require "AmazonDRS.agent.lib.nut:1.0.0"
-```
+**To add this library to your project, add** `#require "AmazonDRS.agent.lib.nut:1.0.0"` **to the top of your agent code**
 
 ## Library Usage ##
 
@@ -29,24 +23,18 @@ Before using the library you need to have:
 
 ### Authentication ###
 
-There are two authentication methods available in this library:
-- [Internal authentication](#internal-authentication)
-- [External authentication](#external-authentication)
+This library needs a `Refresh Token` to be able to call the Amazon's DRS API.
+The `Refresh Token` can be acquired with the [login()](TODO) method or any other application-specific way.
+Then this token should be passed in with the [setRefreshToken()](TODO) method.
 
-#### Internal authentication ####
-
-This method allows you to authenticate an agent as a DRS-device in the Amazon's Login With Amazon (LWA) without writing any extra code. But it may be not appropriate for production usage due to necessity of exposing the agent's URL.
-
-The authentication flow is the following:
+The [login()](TODO) method provides the following authentication flow:
 1. a user opens the agent's URL in a browser
 1. the library handles this request and redirects the user to the Amazon login page or to the Amazon device's settings page if the user is already logged in
 1. the user sets up the device in the Amazon's UI
 1. the Amazon's LWA redirects the user back to the agent's URL with an authorization code
 1. the agent receives this code and acquires security tokens (`Refresh Token` and `Access Token`)
 
-#### External authentication ####
-
-This options is used when a `Refresh Token` is acquired by an external code and should be passed to this library, so that the library can get and refresh an `Access Token`. This approach may be used in production, for example, with some intermediary server which manages authentication process.
+**Note**: After each restart of the agent the `Refresh Token` should be passed in to the library. So if you don't want to go through the authentication steps again, you may save the token in the agent's persistent storage and set it with the [setRefreshToken()](TODO) method after each restart of the agent.
 
 ### Callbacks ###
 
@@ -72,11 +60,15 @@ This method returns a new AmazonDRS instance.
 TODO
 ```
 
-### startAuthentication(*[onAuthenticated[, testDevice]]*) ###
+### login(*[onAuthenticated[, testDevice]]*) ###
 
 This method starts the [internal authentication](#internal-authentication). Either this method or [*setRefreshToken*](TODO) should be called and authentication should be done before making any DRS-related requests.
 
-Successful authentication automatically disables the internal authentication started with this method. You may call this method to start the internal authentication again.
+**If you are going to use this method, please add the following line to the top of your agent code:**
+
+```squirrel
+#require "Rocky.class.nut:2.0.1"
+```
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
@@ -102,7 +94,7 @@ TODO
 
 ### setRefreshToken(*refreshToken*) ###
 
-This method allows to set a `Refresh Token` manually. It is used for the [external authentication](#external-authentication). Either this method or [*startAuthentication*](TODO) should be called before making any DRS-related requests.
+This method allows to set a `Refresh Token` manually. It is used for the [external authentication](#external-authentication). Either this method or [*login*](TODO) should be called before making any DRS-related requests.
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
