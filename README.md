@@ -43,14 +43,12 @@ All requests that are made to the Amazon platform occur asynchronously. Every me
 
 ## AmazonDRS Class ##
 
-### Constructor: AmazonDRS(*deviceModel, deviceSerial, clientId, clientSecret*) ###
+### Constructor: AmazonDRS(*clientId, clientSecret*) ###
 
 This method returns a new AmazonDRS instance.
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
-| *deviceModel* | String | Yes | `Device Model`. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
-| *deviceSerial* | String | Yes | `Device Serial`. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
 | *clientId* | String | Yes | `Client ID` of your LWA Security Profile. For information, please see [here](https://developer.amazon.com/docs/login-with-amazon/glossary.html#client_identifier). |
 | *clientSecret* | String | Yes | `Client Secret` of your LWA Security Profile. For information, please see [here](https://developer.amazon.com/docs/login-with-amazon/glossary.html#client_secret). |
 
@@ -61,7 +59,7 @@ This method returns a new AmazonDRS instance.
 TODO
 ```
 
-### login(*[onAuthenticated[, testDevice]]*) ###
+### login(*deviceModel, deviceSerial[, onAuthenticated[, testDevice]]*) ###
 
 This method allows to authenticate the agent on the Amazon and get required security tokens. The method automatically sets the obtained tokens to be used for DRS API calls, so you do not need to call the [setRefreshToken()](TODO) method. For more information, please read about [authentication](#authentication). 
 
@@ -71,6 +69,8 @@ Either this method or [setRefreshToken()](TODO) should be called and authenticat
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
+| *deviceModel* | String | Yes | `Device Model`. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
+| *deviceSerial* | String | Yes | `Device Serial`. For information, please see [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#integrate-with-the-lwa-sdk-for-javascript). |
 | *onAuthenticated* | Function | Optional | Callback called when the operation is completed or an error happens. |
 | *testDevice* | Boolean | Optional | `True` if it is a test device making test orders. `False` by default. For more information, please see [here](https://developer.amazon.com/docs/dash/test-device-purchases.html). |
 
@@ -80,7 +80,7 @@ The method returns nothing. A result of the operation may be obtained via the [o
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
-| *error* | Integer | `0` if the authentication is successful, an [error code](#error-code) otherwise. |
+| *error* | Integer | `0` if the authentication is successful, an [error code](#error-code) otherwise. See possible HTTP error codes [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-errors). |
 | *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See here about the response format](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-response). Also may contain an error details described [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-errors) and [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#authorization-errors). |
 
 TODO: could be some exceptions
@@ -128,7 +128,7 @@ The method returns nothing. A result of the operation may be obtained via the [o
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
-| *error* | Integer | `0` if the operation is completed successfully, an [error code](#error-code) otherwise. |
+| *error* | Integer | `0` if the operation is completed successfully, an [error code](#error-code) otherwise. See possible HTTP error codes [here](https://developer.amazon.com/docs/dash/replenish-endpoint.html#error-responses). |
 | *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See response example](https://developer.amazon.com/docs/dash/replenish-endpoint.html#response-example). Also may contain an [error details](https://developer.amazon.com/docs/dash/replenish-endpoint.html#error-responses). |
 
 #### Example ####
@@ -154,7 +154,7 @@ The method returns nothing. A result of the operation may be obtained via the [o
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
-| *error* | Integer | `0` if the operation is completed successfully, an [error code](#error-code) otherwise. |
+| *error* | Integer | `0` if the operation is completed successfully, an [error code](#error-code) otherwise. See possible HTTP error codes [here](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#error-responses). |
 | *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See response example](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#response-example). Also may contain an [error details](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#error-responses). |
 
 #### Example ####
@@ -175,7 +175,7 @@ An *Integer* error code which specifies a concrete error (if any) happened durin
 | --- | --- |
 | 0 | No error. |
 | 1-99 | [Internal errors of the HTTP API](https://developer.electricimp.com/api/httprequest/sendasync). |
-| 100-999 | HTTP error codes from Amazon server. See [here](https://developer.amazon.com/docs/dash/replenish-endpoint.html#error-responses) for [replenish](TODO) method and [here](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#error-responses) for [cancelTestOrder](TODO) method.  |
+| 100-999 | HTTP error codes from Amazon server. See methods' descriptions for more information. |
 | 1000 | The client is not authenticated. |
 | 1001 | The authentication process is already started. |
 | 1002 | The operation is not allowed now. Eg. the same operation is already in process. |
