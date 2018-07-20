@@ -33,7 +33,7 @@ The [login()](TODO) method provides the following authentication flow:
 1. the Amazon's LWA redirects the user back to the agent's URL with an authorization code
 1. the agent receives this code and acquires security tokens (`Refresh Token` and `Access Token`)
 
-More about authentication [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#obtain-refresh-and-access-tokens-using-authorization-code-grant) and [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#authorization-errors).
+More about authentication [here](https://developer.amazon.com/docs/dash/lwa-web-api.html) and [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html).
 
 **Note**: After each restart of the agent the `Refresh Token` should be passed in to the library. So if you don't want to go through the authentication steps again, you may save the token in the agent's persistent storage and set it with the [setRefreshToken()](TODO) method after each restart of the agent.
 
@@ -81,7 +81,7 @@ The method returns nothing. A result of the operation may be obtained via the [o
 | Parameter | Data Type | Description |
 | --- | --- | --- |
 | *error* | Integer | `0` if the authentication is successful, an [error code](#error-code) otherwise. |
-| *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See here for more information](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-response). Also may contain an [error details](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-errors). |
+| *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See here about the response format](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-response). Also may contain an error details described [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-errors) and [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#authorization-errors). |
 
 TODO: could be some exceptions
 
