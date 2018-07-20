@@ -9,7 +9,7 @@ This version of the library supports the following functionality:
 - Canceling test orders
 - Placing real orders for Amazon goods
 
-**To add this library to your project, add** `#require "AmazonDRS.agent.lib.nut:1.0.0"` **to the top of your agent code**
+**To add this library to your project, add** `#require "AmazonDRS.agent.lib.nut:1.0.0"` **to the top of your agent code.**
 
 ## Library Usage ##
 
@@ -24,8 +24,7 @@ Before using the library you need to have:
 ### Authentication ###
 
 This library needs a `Refresh Token` to be able to call the Amazon's DRS API.
-The `Refresh Token` can be acquired with the [login()](TODO) method or any other application-specific way.
-Then this token should be passed in with the [setRefreshToken()](TODO) method.
+The `Refresh Token` can be acquired with the [login()](TODO) method. Also it can be acquired with any other application-specific way and then passed in with the [setRefreshToken()](TODO) method.
 
 The [login()](TODO) method provides the following authentication flow:
 1. a user opens the agent's URL in a browser
@@ -33,6 +32,8 @@ The [login()](TODO) method provides the following authentication flow:
 1. the user sets up the device in the Amazon's UI
 1. the Amazon's LWA redirects the user back to the agent's URL with an authorization code
 1. the agent receives this code and acquires security tokens (`Refresh Token` and `Access Token`)
+
+More about authentication [here](https://developer.amazon.com/docs/dash/lwa-web-api.html#obtain-refresh-and-access-tokens-using-authorization-code-grant) and [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#authorization-errors).
 
 **Note**: After each restart of the agent the `Refresh Token` should be passed in to the library. So if you don't want to go through the authentication steps again, you may save the token in the agent's persistent storage and set it with the [setRefreshToken()](TODO) method after each restart of the agent.
 
@@ -62,13 +63,11 @@ TODO
 
 ### login(*[onAuthenticated[, testDevice]]*) ###
 
-This method starts the [internal authentication](#internal-authentication). Either this method or [*setRefreshToken*](TODO) should be called and authentication should be done before making any DRS-related requests.
+This method allows to authenticate the agent on the Amazon and get required security tokens. The method automatically sets the obtained tokens to be used for DRS API calls, so you do not need to call the [setRefreshToken()](TODO) method. For more information, please read about [authentication](#authentication). 
 
-**If you are going to use this method, please add the following line to the top of your agent code:**
+Either this method or [setRefreshToken()](TODO) should be called and authentication should be done before making any DRS-related requests.
 
-```squirrel
-#require "Rocky.class.nut:2.0.1"
-```
+**If you are going to use this method, please add** `#require "Rocky.class.nut:2.0.1"` **to the top of your agent code.**
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
@@ -77,12 +76,12 @@ This method starts the [internal authentication](#internal-authentication). Eith
 
 The method returns nothing. A result of the operation may be obtained via the [onAuthenticated](TODO) callback, if specified in this method.
 
-#### Callback: onAuthenticated(*error, details*) ####
+#### Callback: onAuthenticated(*error, response*) ####
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
-| *error* | Integer | `0` if the authentication is successful, an error code otherwise. |
-| *details* | Table | Key-value table with the error's details provided by Amazon server. May be empty. This parameter should be ignored if *error* is `0`. [See "Error Parameters" for more information](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#authorization-errors). |
+| *error* | Integer | `0` if the authentication is successful, an [error code](#error-code) otherwise. |
+| *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See here for more information](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-response). Also may contain an [error details](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-errors). |
 
 TODO: could be some exceptions
 
@@ -94,11 +93,13 @@ TODO
 
 ### setRefreshToken(*refreshToken*) ###
 
-This method allows to set a `Refresh Token` manually. It is used for the [external authentication](#external-authentication). Either this method or [*login*](TODO) should be called before making any DRS-related requests.
+This method allows to set a `Refresh Token` manually. For more information, please read about [authentication](#authentication). 
+
+Either this method or [login()](TODO) should be called and authentication should be done before making any DRS-related requests.
 
 | Parameter | Data Type | Required? | Description |
 | --- | --- | --- | --- |
-| *refreshToken* | String | Yes | An authentication `Refresh Token` used to acquire an `Access Token` and refresh it when expired. |
+| *refreshToken* | String | Yes | A `Refresh Token` used to acquire an `Access Token` and refresh it when expired. |
 
 The method returns nothing.
 
@@ -107,6 +108,10 @@ The method returns nothing.
 ```
 TODO
 ```
+
+### getRefreshToken() ###
+
+The method returns the `Refresh Token` or `null` if it is not set.
 
 ### replenish(*slotId[, onReplenished]*) ###
 
@@ -123,7 +128,7 @@ The method returns nothing. A result of the operation may be obtained via the [o
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
-| *error* | Integer | `0` if the operation is completed successfully, an error code otherwise. |
+| *error* | Integer | `0` if the operation is completed successfully, an [error code](#error-code) otherwise. |
 | *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See response example](https://developer.amazon.com/docs/dash/replenish-endpoint.html#response-example). Also may contain an [error details](https://developer.amazon.com/docs/dash/replenish-endpoint.html#error-responses). |
 
 #### Example ####
@@ -149,7 +154,7 @@ The method returns nothing. A result of the operation may be obtained via the [o
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
-| *error* | Integer | `0` if the operation is completed successfully, an error code otherwise. |
+| *error* | Integer | `0` if the operation is completed successfully, an [error code](#error-code) otherwise. |
 | *response* | Table | Key-value table with the response provided by Amazon server. May be empty. [See response example](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#response-example). Also may contain an [error details](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#error-responses). |
 
 #### Example ####
@@ -162,7 +167,7 @@ TODO
 
 This method enables (*value* is `true`) or disables (*value* is `false`) the library debug output (including error logging). It is disabled by default. The method returns nothing.
 
-### Error codes ###
+### Error code ###
 
 An *Integer* error code which specifies a concrete error (if any) happened during an operation.
 
