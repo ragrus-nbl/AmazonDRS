@@ -56,7 +56,7 @@ This stage is used to authenticate the imp application in Amazon.
 
 ### Create a device ###
 
-1. In the [Amazon Developer Console](https://developer.amazon.com/home.html), the **APPS & SERVICES** tab and choose **Dash Replenishment Service**.
+1. In the [Amazon Developer Console](https://developer.amazon.com/home.html), click the **APPS & SERVICES** tab and choose **Dash Replenishment Service**.
 ![Open Dash Replenishment Service](images/DRS.png "Open Dash Replenishment Service")
 1. Click the **CREATE A DEVICE** button.
 1. In the appeared window, fill in the fields:
@@ -64,12 +64,14 @@ This stage is used to authenticate the imp application in Amazon.
     2. **Model ID**: `example_model`
 ![Fill in the fields](images/CreateDevice.png "Fill in the fields")
 1. Click **Save**.
+1. Open the **Slot Localization** tab and make a note of **Slot ID**.
+![Make a note of Slot ID](images/SlotID.png "Make a note of Slot ID")
 
 ### Adding API Keys to Your Agent Code ###
 
 1. Return to impCentral.
-1. Find the *SALESFORCE CONSTANTS* section at the **end** of the agent code, and enter the **Consumer Key** and **Consumer Secret** from the step above as the values of the *CONSUMER_KEY* and *CONSUMER_SECRET* constants, respectively.
-![In impCentral, add your Salesforce connected app Consumer Secret and Consumer Key to the places provided in the agent code](images/SetConstants.png "In impCentral, add your Salesforce connected app Consumer Secret and Consumer Key to the places provided in the agent code")
+1. Find the *AMAZON DRS CONSTANTS* section at the **end** of the agent code, and enter the **Client ID**, **Client Secret** and **Slot ID** from the steps above as the values of the *AMAZON_DRS_CLIENT_ID*, *AMAZON_DRS_CLIENT_SECRET* and *AMAZON_DRS_SLOT_ID* constants, respectively.
+![In impCentral, set the constants in the agent code](images/SetConstants.png "In impCentral, set the constants in the agent code")
 1. Again, do not close impCentral.
 
 ### Build and Run the Electric Imp Application ###
