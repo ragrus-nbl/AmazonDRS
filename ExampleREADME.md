@@ -38,48 +38,32 @@ This stage is used to authenticate the imp application in Amazon.
 1. Click **Create a New Security Profile**.
 ![Create a New Security Profile](images/CreateSP.png "Create a New Security Profile")
 1. Enter the following information:
-    1. **Security Profile Name**: example
-    1. **Security Profile Description**: example
+    1. **Security Profile Name**: `example_sp`
+    1. **Security Profile Description**: `example_sp_desc`
     1. **Consent Privacy Notice URL**: `https://example.com`
 1. Click **Save**.
 ![Enter required information and click Save](images/InfoForSP.png "Enter required information and click Save")
 1. Then you'll be taken to your list of security profiles. Click the gear next to the Security Profile you created and select **Security Profile**.
 ![Click the gear next to the Security Profile you created and select Security Profile](images/ViewSP.png "Click the gear next to the Security Profile you created and select Security Profile")
 1. Make a note of your **Client ID** and **Client Secret**.
-![Make a note of your Client ID and Client Secret](images/LWA.png "Make a note of your Client ID and Client Secret")
+![Make a note of your Client ID and Client Secret](images/Credentials.png "Make a note of your Client ID and Client Secret")
+1. Then click on the **Web Settings** tab and enter the agent's URL into the **Allowed Return URLs** field.
+![Enter the agent's URL into the Allowed Return URLs](images/AllowedURLs.png "Enter the agent's URL into the Allowed Return URLs")
+1. Click **Save**.
 1. Do not close this page.
 
-**Note:** any Salesforce Connected Application works only for the one agent the URL of which you entered in the OAuth Settings section.
+**Note:** any LWA Security Profile works only for the one agent the URL of which you entered in the **Allowed Return URLs** field.
 
-### Create Platform Event in Salesforce ###
+### Create a device ###
 
-Platform Events transfer the data from the device to Salesforce.
-
-The Platform Event fields must have the names and types mentioned here. If you change anything in the Platform Event definition, you will need to update the imp application’s agent code. The names of the Platform Event and its field are entered into the agent code as constants *EVENT_NAME* and *EVENT_FIELD_NAME*.
-
-1. On the Salesforce page, click the **Setup** icon in the top-right navigation menu and select **Setup**.
-![Select Setup from the top-right gearwheel icon](images/Setup.png "Select Setup from the top-right gearwheel icon")
-1. Enter **Platform Events** into the **Quick Find** box and then select **Data > Platform Events**.
-![Type Platform Events into the Quick Find box and then click on Data and then Platform Events](images/PlatformEvents.png "Type Platform Events into the Quick Find box and then click on Data and then Platform Events")
-1. Click **New Platform Event**.
-1. In the **New Platform Event** form, fill in:
-    1. Field Label: **Test Event**
-    1. Plural Label: **Test Events**
-    1. Object Name: **Test_Event**
-![Set up a Platform Event](images/PlatformEventSetup.png "Set up a Platform Event")
-    1. Click **Save**.
-1. You will be redirected to the **Test Event** Platform Event page.
-Now you need to create a Platform Event field.
-In the **Custom Fields & Relationships** section, click **New** to create the field.
-![Add new field to the new Platform Event](images/AddField.png "Add new field to the new Platform Event")
-1. In the **New Custom Field** form:
-    1. Data Type: **Text**
-    1. Click **Next**.
-    1. Field Label: **My Timestamp**
-    1. Length: **16**
-    1. Field Name: **My_Timestamp**
-    1. Click **Save**.
-1. Make sure that the **Test Event API Name** is **Test_Event__e** and that **Custom Fields & Relationships** contains **My Timestamp** field with **My_Timestamp__c** API Name.
+1. In the [Amazon Developer Console](https://developer.amazon.com/home.html), the **APPS & SERVICES** tab and choose **Dash Replenishment Service**.
+![Open Dash Replenishment Service](images/DRS.png "Open Dash Replenishment Service")
+1. Click the **CREATE A DEVICE** button.
+1. In the appeared window, fill in the fields:
+    1. **Name**: `example_device`
+    2. **Model ID**: `example_model`
+![Fill in the fields](images/CreateDevice.png "Fill in the fields")
+1. Click **Save**.
 
 ### Adding API Keys to Your Agent Code ###
 
