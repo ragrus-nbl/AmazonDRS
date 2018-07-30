@@ -24,7 +24,7 @@ Before using the library you need to have:
 ### Authentication ###
 
 This library needs a `Refresh Token` to be able to call the Amazon's DRS API.
-The `Refresh Token` can be acquired with the [login()](#logindevicemodel-deviceserial-onauthenticated-testdevice) method. Also it can be acquired with any other application-specific way and then passed in with the [setRefreshToken()](#setrefreshtokenrefreshtoken) method.
+The `Refresh Token` can be acquired with the [login()](#logindevicemodel-deviceserial-onauthenticated-testdevice) method. Also, it can be acquired with any other application-specific way and then passed in with the [setRefreshToken()](#setrefreshtokenrefreshtoken) method.
 
 The [login()](#logindevicemodel-deviceserial-onauthenticated-testdevice) method provides the following authentication flow:
 1. a user opens the agent's URL in a browser
@@ -33,16 +33,16 @@ The [login()](#logindevicemodel-deviceserial-onauthenticated-testdevice) method 
 1. the Amazon's LWA redirects the user back to the agent's URL with an authorization code
 1. the agent receives this code and acquires security tokens (`Refresh Token` and `Access Token`)
 
-More about authentication [here](https://developer.amazon.com/docs/dash/lwa-web-api.html) and [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html).
+More about authentication [here](https://developer.amazon.com/docs/dash/lwa-web-api.html) and [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html). Also, see [the provided example](#example-store-and-load-refresh-token).
 
 **Note**: After each restart of the agent the `Refresh Token` should be passed in to the library. So if you don't want to go through the authentication steps again, you may save the token in the agent's persistent storage and set it with the [setRefreshToken()](#setrefreshtokenrefreshtoken) method after each restart of the agent.
 
 ### Test Orders ###
 
-For testing purposes Amazon DRS allows to make [test orders](https://developer.amazon.com/docs/dash/test-device-purchases.html). Test orders are those that made by a DRS device authenticated as a test device. So it is determined at the step of authentication whether the device is for testing or not.
+For testing purposes, Amazon DRS allows making [test orders](https://developer.amazon.com/docs/dash/test-device-purchases.html). Test orders are those that made by a DRS device authenticated as a test device. So it is determined at the step of authentication whether the device is for testing or not.
 Due to this the [login()](#logindevicemodel-deviceserial-onauthenticated-testdevice) method has a parameter *testDevice*. But if you set a `Refresh Token` manually with the [setRefreshToken()](#setrefreshtokenrefreshtoken) method, only you know whether this token was obtained for testing or not and such *testDevice* parameter is not required here.
 
-Also, only test orders can be canceled with the [DRS API](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html).
+Only test orders can be canceled with the [cancelTestOrder()](#canceltestorderslotid-oncanceled) method.
 
 ### Callbacks ###
 
@@ -58,13 +58,6 @@ This method returns a new AmazonDRS instance.
 | --- | --- | --- | --- |
 | *clientId* | String | Yes | `Client ID` of your LWA Security Profile. For information, please see [here](https://developer.amazon.com/docs/login-with-amazon/glossary.html#client_identifier). |
 | *clientSecret* | String | Yes | `Client Secret` of your LWA Security Profile. For information, please see [here](https://developer.amazon.com/docs/login-with-amazon/glossary.html#client_secret). |
-
-#### Example ####
-
-```
-#require "AmazonDRS.agent.lib.nut:1.0.0"
-TODO
-```
 
 ### login(*deviceModel, deviceSerial[, onAuthenticated[, testDevice]]*) ###
 
@@ -83,24 +76,43 @@ If the **Rocky** library is not included, the method will throw an exception.
 | *onAuthenticated* | Function | Optional | Callback called when the operation is completed or an error happens. |
 | *testDevice* | Boolean | Optional | `True` if it is a test device. `False` by default. For more information, please see [here](https://developer.amazon.com/docs/dash/test-device-purchases.html) and the [Test Orders section](#test-orders). |
 
-The method returns nothing. A result of the operation may be obtained via the [onAuthenticated](#callback-onauthenticatederror-response) callback, if specified in this method.
+The method returns nothing. A result of the operation may be obtained via the [onAuthenticated](#callback-onauthenticatederror-response) callback if specified in this method.
 
 #### Callback: onAuthenticated(*error, response*) ####
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
 | *error* | Integer | `0` if the authentication is successful, an [error code](#error-code) otherwise. See possible HTTP error codes [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-errors). |
-| *response* | Table | Key-value table with the response provided by Amazon server. May be `null`. [See here about the response format](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-response). Also may contain an error details described [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-errors) and [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#authorization-errors). |
+| *response* | Table | Key-value table with the response provided by Amazon server. May be `null`. [See here about the response format](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-response). Also may contain error details described [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#access-token-errors) and [here](https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#authorization-errors). |
 
 #### Example ####
 
 ```
-TODO
+#require "Rocky.class.nut:2.0.1"
+#require "AmazonDRS.agent.lib.nut:1.0.0"
+
+const AMAZON_DRS_CLIENT_ID = "<YOUR_AMAZON_CLIENT_ID>";
+const AMAZON_DRS_CLIENT_SECRET = "<YOUR_AMAZON_CLIENT_SECRET>";
+const AMAZON_DRS_DEVICE_MODEL = "<YOUR_AMAZON_DEVICE_MODEL>";
+const AMAZON_DRS_DEVICE_SERIAL = "<YOUR_AMAZON_DEVICE_SERIAL>";
+
+testDevice <- true;
+
+function onAuthenticated(error, response) {
+    if (error != 0) {
+        server.error("Error authenticating: code = " + error + " response = " + http.jsonencode(response));
+        return;
+    }
+    server.log("Successfully authenticated!");
+}
+
+client <- AmazonDRS(AMAZON_DRS_CLIENT_ID, AMAZON_DRS_CLIENT_SECRET);
+client.login(AMAZON_DRS_DEVICE_MODEL, AMAZON_DRS_DEVICE_SERIAL, onAuthenticated.bindenv(this), testDevice);
 ```
 
 ### setRefreshToken(*refreshToken*) ###
 
-This method allows to set a `Refresh Token` manually. For more information, please read about [authentication](#authentication). 
+This method allows setting a `Refresh Token` manually. For more information, please read about [authentication](#authentication). 
 
 Either this method or [login()](#logindevicemodel-deviceserial-onauthenticated-testdevice) should be called and authentication should be done before making any DRS-related requests.
 
@@ -113,7 +125,14 @@ The method returns nothing.
 #### Example ####
 
 ```
-TODO
+#require "AmazonDRS.agent.lib.nut:1.0.0"
+
+const AMAZON_DRS_CLIENT_ID = "<YOUR_AMAZON_CLIENT_ID>";
+const AMAZON_DRS_CLIENT_SECRET = "<YOUR_AMAZON_CLIENT_SECRET>";
+const AMAZON_DRS_REFRESH_TOKEN = "<YOUR_AMAZON_VALID_REFRESH_TOKEN>";
+
+client <- AmazonDRS(AMAZON_DRS_CLIENT_ID, AMAZON_DRS_CLIENT_SECRET);
+client.setRefreshToken(AMAZON_DRS_REFRESH_TOKEN);
 ```
 
 ### getRefreshToken() ###
@@ -129,19 +148,30 @@ This method places an order for a device/slot combination. For more information,
 | *slotId* | String | Yes | ID of a slot to place an order for it. |
 | *onReplenished* | Function | Optional | Callback called when the operation is completed or an error happens. |
 
-The method returns nothing. A result of the operation may be obtained via the [onReplenished](#callback-onreplenishederror-response) callback, if specified in this method.
+The method returns nothing. A result of the operation may be obtained via the [onReplenished](#callback-onreplenishederror-response) callback if specified in this method.
 
 #### Callback: onReplenished(*error, response*) ####
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
 | *error* | Integer | `0` if the operation is completed successfully, an [error code](#error-code) otherwise. See possible HTTP error codes [here](https://developer.amazon.com/docs/dash/replenish-endpoint.html#error-responses). |
-| *response* | Table | Key-value table with the response provided by Amazon server. May be `null`. [See response example](https://developer.amazon.com/docs/dash/replenish-endpoint.html#response-example). Also may contain an [error details](https://developer.amazon.com/docs/dash/replenish-endpoint.html#error-responses). |
+| *response* | Table | Key-value table with the response provided by Amazon server. May be `null`. [See response example](https://developer.amazon.com/docs/dash/replenish-endpoint.html#response-example). Also may contain [error details](https://developer.amazon.com/docs/dash/replenish-endpoint.html#error-responses). |
 
 #### Example ####
 
 ```
-TODO
+const AMAZON_DRS_SLOT_ID = "<YOUR_AMAZON_SLOT_ID>";
+
+function onReplenished(error, response) {
+    if (error != 0) {
+        server.error("Error replenishing: code = " + error + " response = " + http.jsonencode(response));
+        return;
+    }
+    server.log("An order has been placed. Response from server: " + http.jsonencode(response));
+}
+
+// It is supposed that the client has been authenticated with either login() method or setRefreshToken() method
+client.replenish(AMAZON_DRS_SLOT_ID, onReplenished.bindenv(this));
 ```
 
 ### cancelTestOrder(*[slotId[, onCanceled]]*) ###
@@ -155,19 +185,31 @@ The method can only be used for the orders made by a test device ([a device auth
 | *slotId* | String | Optional | ID of a slot to be canceled. If is `null` or not specified, test orders for all slots in the device will be canceled. |
 | *onCanceled* | Function | Optional | Callback called when the operation is completed or an error happens. |
 
-The method returns nothing. A result of the operation may be obtained via the [onCanceled](#callback-oncancelederror-response) callback, if specified in this method.
+The method returns nothing. A result of the operation may be obtained via the [onCanceled](#callback-oncancelederror-response) callback if specified in this method.
 
 #### Callback: onCanceled(*error, response*) ####
 
 | Parameter | Data Type | Description |
 | --- | --- | --- |
 | *error* | Integer | `0` if the operation is completed successfully, an [error code](#error-code) otherwise. See possible HTTP error codes [here](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#error-responses). |
-| *response* | Table | Key-value table with the response provided by Amazon server. May be `null`. [See response example](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#response-example). Also may contain an [error details](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#error-responses). |
+| *response* | Table | Key-value table with the response provided by Amazon server. May be `null`. [See response example](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#response-example). Also may contain [error details](https://developer.amazon.com/docs/dash/canceltestorder-endpoint.html#error-responses). |
 
 #### Example ####
 
 ```
-TODO
+const AMAZON_DRS_SLOT_ID = "<YOUR_AMAZON_SLOT_ID>";
+
+function onCanceled(error, response) {
+    if (error != 0) {
+        server.error("Error canceling: code = " + error + " response = " + http.jsonencode(response));
+        return;
+    }
+    server.log("The order has been canceled. Response from server: " + http.jsonencode(response));
+}
+
+// It is supposed that client has been authenticated with either login() method or setRefreshToken() method
+// as a test DRS device
+client.cancelTestOrder(AMAZON_DRS_SLOT_ID, onCanceled.bindenv(this));
 ```
 
 ### setDebug(*value*) ###
@@ -190,6 +232,58 @@ An *Integer* error code which specifies a concrete error (if any) happened durin
 ## Examples ##
 
 Working examples are provided in the [examples](./examples) directory and described [here](./examples/README.md).
+
+The following example shows proper usage of login(), setRefreshToken() and getRefreshToken() methods.
+
+### Example: Store And Load Refresh Token ###
+
+```
+#require "Rocky.class.nut:2.0.1"
+#require "AmazonDRS.agent.lib.nut:1.0.0"
+
+const AMAZON_DRS_CLIENT_ID = "<YOUR_AMAZON_CLIENT_ID>";
+const AMAZON_DRS_CLIENT_SECRET = "<YOUR_AMAZON_CLIENT_SECRET>";
+const AMAZON_DRS_DEVICE_MODEL = "<YOUR_AMAZON_DEVICE_MODEL>";
+const AMAZON_DRS_DEVICE_SERIAL = "<YOUR_AMAZON_DEVICE_SERIAL>";
+
+function getStoredRefreshToken() {
+    local persist = server.load();
+    local amazonDRS = {};
+    if ("amazonDRS" in persist) amazonDRS = persist.amazonDRS;
+
+    // Load credentials if we have them
+    if ("refreshToken" in amazonDRS) {
+        server.log("Refresh Token found!");
+        return amazonDRS.refreshToken;
+    }
+    return null;
+}
+
+client <- AmazonDRS(AMAZON_DRS_CLIENT_ID, AMAZON_DRS_CLIENT_SECRET);
+
+refreshToken = getStoredRefreshToken();
+if (refreshToken != null) {
+    client.setRefreshToken(refreshToken);
+} else {
+    function onAuthenticated(error, response) {
+        if (error != 0) {
+            server.error("Error authenticating: code = " + error + " response = " + http.jsonencode(response));
+            return;
+        }
+        refreshToken = client.getRefreshToken();
+        client.setRefreshToken(refreshToken);
+        local persist = server.load();
+        persist.amazonDRS <- { "refreshToken" : refreshToken };
+        server.save(persist);
+        server.log("Successfully authenticated!");
+        server.log("Refresh Token saved!");
+    }
+    
+    local testDevice = true;
+    client.login(AMAZON_DRS_DEVICE_MODEL, AMAZON_DRS_DEVICE_SERIAL, onAuthenticated.bindenv(this), testDevice);
+    server.log("Log in please!");
+}
+```
 
 ## Testing ##
 
